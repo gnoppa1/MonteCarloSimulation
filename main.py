@@ -1,10 +1,14 @@
-###################required imports#########################
+###################IMPORTS#########################
 import random
 import matplotlib
 import matplotlib.pyplot as plt
 import  time
 
-
+####################SETTINGS###############################
+sampleSize = 100
+startingFunds = 1000
+wagerSize = 100
+wagerCount = 1000
 
 def rollDice():
     roll = random.randint(1,100)
@@ -79,7 +83,7 @@ def doubler_better(funds, initial_wager, wager_count):
 
         currentWager += 1
     #print(value)
-    plt.plot(wX, vY)
+    plt.plot(wX, vY, 'c')
 
 """xx = 0
 broke_count = 0
@@ -127,20 +131,23 @@ def simple_bettor(funds, initial_wager, wager_count):
         value ="broke"
 
     #print("Funds: {}".format(value))
-    plt.plot(wX, vY)
+    plt.plot(wX, vY, 'k')
 
 ###############call
 broke_count = 0
 x = 0
-while x < 1000:
-    simple_bettor(10000, 100, 100)
+while x < sampleSize:
+    simple_bettor(startingFunds, wagerSize, wagerCount)
+    doubler_better(startingFunds, wagerSize, wagerCount)
     x += 1
 
+'''
 death_rate = int(broke_count/float(x)*1000)
 survival_rate = int(100 - broke_count/float(x)*100)
 
 print('Death rate {}'.format(death_rate))
 print('Survival rate {}'.format(survival_rate))
+'''
 
 plt.axhline(0, color = 'r')
 
