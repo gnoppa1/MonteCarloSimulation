@@ -22,6 +22,7 @@ def rollDice():
 def doubler_better(funds, initial_wager, wager_count):
     value = funds
     wager = initial_wager
+    global broke_count
 
     wX =[]
     vY = []
@@ -33,41 +34,43 @@ def doubler_better(funds, initial_wager, wager_count):
 
     while currentWager <= wager_count:
         if previousWager == 'win':
-            print('Won')
+            #print('Won')
             if rollDice():
                 value += wager
-                print(value)
+                #print(value)
                 wX.append(currentWager)
                 vY.append(value)
             else:
                 value -= wager
                 previousWager = 'loss'
-                print(value)
+                #print(value)
                 previousWagerAmount = wager
                 wX.append(currentWager)
                 vY.append(value)
                 if value < 0:
-                    print('We went broke after {} bets'.format(currentWager))
+                    #print('We went broke after {} bets'.format(currentWager))
+                    broke_count += 1
                     break
         elif previousWager == 'loss':
-            print('We lost the last one, so we will be smart and double')
+            #print('We lost the last one, so we will be smart and double')
             if rollDice():
                 wager = previousWagerAmount * 2
-                print('We won {}'.format(wager))
+                #print('We won {}'.format(wager))
                 value += wager
-                print(value)
+                #print(value)
                 wager = initial_wager
                 previousWager = 'win'
                 wX.append(currentWager)
                 vY.append(value)
             else:
                 wager = previousWagerAmount * 2
-                print('We lost wager {}'.format(wager))
+                #print('We lost wager {}'.format(wager))
                 value -= wager
                 if value < 0:
-                    print('we went broke after {} bets'.format(currentWager))
+                    broke_count += 1
+                    #print('we went broke after {} bets'.format(currentWager))
                     break
-                print(value)
+                #print(value)
                 previousWager = 'loss'
 
                 previousWagerAmount = wager
@@ -75,19 +78,32 @@ def doubler_better(funds, initial_wager, wager_count):
                 vY.append(value)
 
         currentWager += 1
-    print(value)
+    #print(value)
     plt.plot(wX, vY)
 
-doubler_better(10000, 100, 100)
-plt.show()
+"""xx = 0
+broke_count = 0
 
-time.sleep(555)
+while xx < 1000:
+    doubler_better(10000, 100, 1000)
+    xx += 1
+
+death_rate = int(broke_count/float(xx)*100)
+survival_rate = int(100 - broke_count/float(xx)*100)
+
+print('Death rate {}'.format(death_rate))
+print('Survival rate {}'.format(survival_rate))
+
+plt.axhline(0, color = 'r')
+plt.show()"""
+
 
 
 
 def simple_bettor(funds, initial_wager, wager_count):
     value = funds
     wager = initial_wager
+    global broke_count
 
     wX =[]
     vY = []
@@ -107,16 +123,26 @@ def simple_bettor(funds, initial_wager, wager_count):
         currentWager += 1
 
     if value < 0:
+        broke_count += 1
         value ="broke"
 
     #print("Funds: {}".format(value))
     plt.plot(wX, vY)
 
 ###############call
+broke_count = 0
 x = 0
-while x < 100:
-    simple_bettor(10000, 100, 1000)
+while x < 1000:
+    simple_bettor(10000, 100, 100)
     x += 1
+
+death_rate = int(broke_count/float(x)*1000)
+survival_rate = int(100 - broke_count/float(x)*100)
+
+print('Death rate {}'.format(death_rate))
+print('Survival rate {}'.format(survival_rate))
+
+plt.axhline(0, color = 'r')
 
 plt.ylabel('Account value')
 plt.xlabel('Wager count')
